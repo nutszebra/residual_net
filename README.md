@@ -8,7 +8,7 @@ Implementation of Residual Networks (ResNet) by chainer
     git clone https://github.com/nutszebra/trainer.git
 
 # How to run
-    python main.py -p ./ -e 200 -b 128 -g 0 -s 1 -trb 4 -teb 4 -lr 0.1 -k 1 -n 27
+    python main.py -p ./ -g 0 
 
 
 # Details about my implementation
@@ -23,7 +23,7 @@ Test: Pictures are randomly resized to 32x32, then they are normalized locally. 
 |:---------------------|-------|-------------------:|
 | ResNet [[1]][Paper]  | 164    | 94.54             |
 | my implementation    | 164    | soon              |
-| ResNet [[1]][Paper]  | 1001   | 95.38             |
+| ResNet [[1]][Paper]  | 1001   | 95.08             |
 
 
 # References
