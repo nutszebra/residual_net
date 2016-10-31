@@ -57,7 +57,7 @@ if __name__ == '__main__':
     print('generating model')
     model = residual_net.ResidualNetwork(10, block_num=3, out_channels=(16 * k, 32 * k, 64 * k), N=(int(N * 2), int(N * 2), int(N * 2)))
     print('Done')
-    optimizer = nutszebra_optimizer.OptimizerWideRes(model, lr=lr)
+    optimizer = nutszebra_optimizer.OptimizerResnet(model, lr=lr)
     args['model'] = model
     args['optimizer'] = optimizer
     args['da'] = nutszebra_data_augmentation.DataAugmentationCifar10NormalizeSmall
