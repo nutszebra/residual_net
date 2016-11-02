@@ -29,7 +29,7 @@ class BN_ReLU_Conv(nutszebra_chainer.Model):
 
 class ResBlock(nutszebra_chainer.Model):
 
-    def __init__(self, in_channel, out_channel, n=38, stride_at_first_layer=2):
+    def __init__(self, in_channel, out_channel, n=27 * 2, stride_at_first_layer=2):
         super(ResBlock, self).__init__()
         modules = []
         modules += [('bn_relu_conv1_1', BN_ReLU_Conv(in_channel, out_channel, 3, stride_at_first_layer, 1))]
@@ -64,7 +64,7 @@ class ResBlock(nutszebra_chainer.Model):
 
     def maybe_pooling(self, x):
         if self.stride_at_first_layer == 2:
-            return F.average_pooling_2d(x, 3, 2, 1)
+            return F.average_pooling_2d(x, 1, 2, 0)
         return x
 
     def __call__(self, x, train=False):
@@ -86,10 +86,10 @@ class ResBlock(nutszebra_chainer.Model):
 
 class ResidualNetwork(nutszebra_chainer.Model):
 
-    def __init__(self, category_num, block_num=3, out_channels=(16, 32, 64), N=(38, 38, 38)):
+    def __init__(self, category_num, block_num=3, out_channels=(16, 32, 64), N=(27 * 2, 27 * 2, 27 * 2)):
         super(ResidualNetwork, self).__init__()
         # conv
-        modules = [('conv1', L.Convolution2D(3, out_channels[0], 7, 2, 3))]
+        modules = [('conv1', L.Convolution2D(3, out_channels[0], 3, 1, 1))]
         in_channel = out_channels[0]
         strides = [1] + [2] * (block_num - 1)
         for i, out_channel, n, stride in six.moves.zip(six.moves.range(1, block_num + 1), out_channels, N, strides):
