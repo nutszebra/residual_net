@@ -22,7 +22,7 @@ if __name__ == '__main__':
                         default='./',
                         help='model and optimizer will be saved every epoch')
     parser.add_argument('--epoch', '-e', type=int,
-                        default=180,
+                        default=164,
                         help='maximum epoch')
     parser.add_argument('--batch', '-b', type=int,
                         default=128,
