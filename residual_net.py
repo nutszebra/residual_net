@@ -114,7 +114,6 @@ class ResidualNetwork(nutszebra_chainer.Model):
 
     def __call__(self, x, train=False):
         h = self.conv1(x)
-        h = F.max_pooling_2d(h, ksize=(3, 3), stride=(2, 2), pad=(1, 1))
         for i in six.moves.range(1, self.block_num + 1):
             h = self['res_block{}'.format(i)](h, train=train)
         h = self.bn_relu_conv(h, train=train)
