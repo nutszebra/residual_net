@@ -29,7 +29,7 @@ class BN_ReLU_Conv(nutszebra_chainer.Model):
 
 class ResBlock(nutszebra_chainer.Model):
 
-    def __init__(self, in_channel, out_channel, n=27 * 2, stride_at_first_layer=2, multiplier=4):
+    def __init__(self, in_channel, out_channel, n=18, stride_at_first_layer=2, multiplier=4):
         super(ResBlock, self).__init__()
         modules = []
         modules += [('bn_relu_conv1_1', BN_ReLU_Conv(in_channel, out_channel, 1, stride_at_first_layer, 0))]
@@ -92,7 +92,7 @@ class ResBlock(nutszebra_chainer.Model):
 
 class ResidualNetwork(nutszebra_chainer.Model):
 
-    def __init__(self, category_num, block_num=3, out_channels=(16, 32, 64), N=(27 * 2, 27 * 2, 27 * 2)):
+    def __init__(self, category_num, block_num=3, out_channels=(16, 32, 64), N=(18, 18, 18)):
         super(ResidualNetwork, self).__init__()
         # conv
         modules = [('conv1', L.Convolution2D(3, out_channels[0], 3, 1, 1))]
