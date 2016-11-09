@@ -29,14 +29,16 @@ class BN_ReLU_Conv(nutszebra_chainer.Model):
 
 class ResBlock(nutszebra_chainer.Model):
 
-    def __init__(self, in_channel, out_channel, n=27 * 2, stride_at_first_layer=2):
+    def __init__(self, in_channel, out_channel, n=27 * 2, stride_at_first_layer=2, multiplier=4):
         super(ResBlock, self).__init__()
         modules = []
-        modules += [('bn_relu_conv1_1', BN_ReLU_Conv(in_channel, out_channel, 3, stride_at_first_layer, 1))]
+        modules += [('bn_relu_conv1_1', BN_ReLU_Conv(in_channel, out_channel, 1, stride_at_first_layer, 0))]
         modules += [('bn_relu_conv2_1', BN_ReLU_Conv(out_channel, out_channel))]
+        modules += [('bn_relu_conv3_1', BN_ReLU_Conv(out_channel, int(multiplier * out_channel), 1, 1, 0))]
         for i in six.moves.range(2, n + 1):
-            modules.append(('bn_relu_conv1_{}'.format(i), BN_ReLU_Conv(out_channel, out_channel)))
+            modules.append(('bn_relu_conv1_{}'.format(i), BN_ReLU_Conv(int(multiplier * out_channel), out_channel, 1, 1, 0)))
             modules.append(('bn_relu_conv2_{}'.format(i), BN_ReLU_Conv(out_channel, out_channel)))
+            modules.append(('bn_relu_conv3_{}'.format(i), BN_ReLU_Conv(out_channel, int(multiplier * out_channel), 1, 1, 0)))
         # register layers
         [self.add_link(*link) for link in modules]
         self.modules = modules
@@ -50,6 +52,7 @@ class ResBlock(nutszebra_chainer.Model):
         for i in six.moves.range(1, self.n + 1):
             self['bn_relu_conv1_{}'.format(i)].weight_initialization()
             self['bn_relu_conv2_{}'.format(i)].weight_initialization()
+            self['bn_relu_conv3_{}'.format(i)].weight_initialization()
 
     @staticmethod
     def concatenate_zero_pad(x, h_shape, volatile, h_type):
@@ -70,17 +73,20 @@ class ResBlock(nutszebra_chainer.Model):
     def __call__(self, x, train=False):
         h = self['bn_relu_conv1_1'](x, train=train)
         h = self['bn_relu_conv2_1'](h, train=train)
+        h = self['bn_relu_conv3_1'](h, train=train)
         x = h + ResBlock.concatenate_zero_pad(self.maybe_pooling(x), h.data.shape, h.volatile, type(h.data))
         for i in six.moves.range(2, self.n + 1):
             h = self['bn_relu_conv1_{}'.format(i)](x, train=train)
-            x = self['bn_relu_conv2_{}'.format(i)](h, train=train) + x
+            h = self['bn_relu_conv2_{}'.format(i)](h, train=train)
+            x = self['bn_relu_conv3_{}'.format(i)](h, train=train) + x
         return x
 
     def count_parameters(self):
         count = 0
         for i in six.moves.range(1, self.n + 1):
-            count = count + self['bn_relu_conv1_{}'.format(i)].count_parameters()
-            count = count + self['bn_relu_conv2_{}'.format(i)].count_parameters()
+            count += self['bn_relu_conv1_{}'.format(i)].count_parameters()
+            count += count + self['bn_relu_conv2_{}'.format(i)].count_parameters()
+            count += count + self['bn_relu_conv3_{}'.format(i)].count_parameters()
         return count
 
 
