@@ -109,7 +109,7 @@ class ResidualNetwork(nutszebra_chainer.Model):
         self.block_num = block_num
         self.out_channels = out_channels
         self.N = N
-        self.name = 'residual_network_{}_{}_{}_{}'.format(category_num, block_num, out_channels, N)
+        self.name = 'residual_network_{}_{}_{}_{}_{}'.format(category_num, block_num, out_channels, N, multiplier)
 
     def weight_initialization(self):
         self.conv1.W.data = self.weight_relu_initialization(self.conv1)
@@ -122,7 +122,7 @@ class ResidualNetwork(nutszebra_chainer.Model):
         h = self.conv1(x)
         for i in six.moves.range(1, self.block_num + 1):
             h = self['res_block{}'.format(i)](h, train=train)
-        h = self.bn_relu_conv(h, train=train)
+        h = self.bn_relu_conv(F.relu(h), train=train)
         num, categories, y, x = h.data.shape
         h = F.reshape(F.average_pooling_2d(h, (y, x)), (num, categories))
         return h
