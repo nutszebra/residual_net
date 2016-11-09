@@ -22,8 +22,11 @@ Test: Pictures are randomly resized to 32x32, then they are normalized locally. 
 | network              | depth | total accuracy (%) |
 |:---------------------|-------|-------------------:|
 | ResNet [[1]][Paper]  | 164    | 94.54             |
-| my implementation    | 164    | soon              |
+| my implementation    | 164    | 93.88             |
 | ResNet [[1]][Paper]  | 1001   | 95.08             |
+
+<img src="https://github.com/nutszebra/residual_net/blob/master/loss.jpg" alt="loss" title="loss">
+<img src="https://github.com/nutszebra/residual_net/blob/master/accuracy.jpg" alt="total accuracy" title="total accuracy">
 
 
 # References
