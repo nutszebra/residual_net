@@ -119,10 +119,10 @@ class ResidualNetwork(nutszebra_chainer.Model):
         self.bn_relu_conv.weight_initialization()
 
     def __call__(self, x, train=False):
-        h = self.conv1(x)
+        h = F.relu(self.conv1(x))
         for i in six.moves.range(1, self.block_num + 1):
             h = self['res_block{}'.format(i)](h, train=train)
-        h = self.bn_relu_conv(h, train=train)
+        h = self.bn_relu_conv(F.relu(h), train=train)
         num, categories, y, x = h.data.shape
         h = F.reshape(F.average_pooling_2d(h, (y, x)), (num, categories))
         return h
