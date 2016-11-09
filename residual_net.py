@@ -92,7 +92,7 @@ class ResBlock(nutszebra_chainer.Model):
 
 class ResidualNetwork(nutszebra_chainer.Model):
 
-    def __init__(self, category_num, block_num=3, out_channels=(16, 32, 64), N=(18, 18, 18)):
+    def __init__(self, category_num, block_num=3, out_channels=(16, 32, 64), N=(18, 18, 18), multiplier=4):
         super(ResidualNetwork, self).__init__()
         # conv
         modules = [('conv1', L.Convolution2D(3, out_channels[0], 3, 1, 1))]
@@ -100,7 +100,7 @@ class ResidualNetwork(nutszebra_chainer.Model):
         strides = [1] + [2] * (block_num - 1)
         for i, out_channel, n, stride in six.moves.zip(six.moves.range(1, block_num + 1), out_channels, N, strides):
             modules.append(('res_block{}'.format(i), ResBlock(in_channel, out_channel, n=n, stride_at_first_layer=stride)))
-            in_channel = out_channel
+            in_channel = int(out_channel * multiplier)
         modules.append(('bn_relu_conv', BN_ReLU_Conv(in_channel, category_num, filter_size=(1, 1), stride=(1, 1), pad=(0, 0))))
         # register layers
         [self.add_link(*link) for link in modules]
