@@ -32,6 +32,7 @@ class ResBlock(nutszebra_chainer.Model):
     def __init__(self, in_channel, out_channel, n=18, stride_at_first_layer=2, multiplier=4):
         super(ResBlock, self).__init__()
         modules = []
+        modules += [('skip_bn', L.BatchNormalization(in_channel))]
         modules += [('bn_relu_conv1_1', BN_ReLU_Conv(in_channel, out_channel, 1, stride_at_first_layer, 0))]
         modules += [('bn_relu_conv2_1', BN_ReLU_Conv(out_channel, out_channel))]
         modules += [('bn_relu_conv3_1', BN_ReLU_Conv(out_channel, int(multiplier * out_channel), 1, 1, 0))]
@@ -74,7 +75,7 @@ class ResBlock(nutszebra_chainer.Model):
         h = self['bn_relu_conv1_1'](x, train=train)
         h = self['bn_relu_conv2_1'](h, train=train)
         h = self['bn_relu_conv3_1'](h, train=train)
-        x = h + ResBlock.concatenate_zero_pad(self.maybe_pooling(x), h.data.shape, h.volatile, type(h.data))
+        x = h + ResBlock.concatenate_zero_pad(self.maybe_pooling(F.relu(self.skip_bn(x, test=not train))), h.data.shape, h.volatile, type(h.data))
         for i in six.moves.range(2, self.n + 1):
             h = self['bn_relu_conv1_{}'.format(i)](x, train=train)
             h = self['bn_relu_conv2_{}'.format(i)](h, train=train)
