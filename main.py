@@ -55,7 +55,7 @@ if __name__ == '__main__':
     N = args.pop('N')
 
     print('generating model')
-    model = residual_net.ResidualNetwork(10, block_num=3, out_channels=(16 * k, 32 * k, 64 * k), N=(int(N), int(N), int(N)))
+    model = residual_net.ResidualNetwork(10, block_num=3, out_channels=(16 * k, 32 * k, 64 * k), N=(N, N, N))
     print('Done')
     optimizer = nutszebra_optimizer.OptimizerResnet(model, lr=lr)
     args['model'] = model
