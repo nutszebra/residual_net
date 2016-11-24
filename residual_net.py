@@ -47,7 +47,7 @@ class ResBlock(nutszebra_chainer.Model):
         self.out_channel = out_channel
         self.n = n
         self.stride_at_first_layer = stride_at_first_layer
-        self.n = n
+        self.multiplier = multiplier
 
     def weight_initialization(self):
         for i in six.moves.range(1, self.n + 1):
@@ -86,8 +86,8 @@ class ResBlock(nutszebra_chainer.Model):
         count = 0
         for i in six.moves.range(1, self.n + 1):
             count += self['bn_relu_conv1_{}'.format(i)].count_parameters()
-            count += count + self['bn_relu_conv2_{}'.format(i)].count_parameters()
-            count += count + self['bn_relu_conv3_{}'.format(i)].count_parameters()
+            count += self['bn_relu_conv2_{}'.format(i)].count_parameters()
+            count += self['bn_relu_conv3_{}'.format(i)].count_parameters()
         return count
 
 
@@ -132,7 +132,7 @@ class ResidualNetwork(nutszebra_chainer.Model):
         count = 0
         count += functools.reduce(lambda a, b: a * b, self.conv1.W.data.shape)
         for i in six.moves.range(1, self.block_num + 1):
-            count = count + self['res_block{}'.format(i)].count_parameters()
+            count += self['res_block{}'.format(i)].count_parameters()
         count += self.bn_relu_conv.count_parameters()
         return count
 
