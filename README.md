@@ -16,7 +16,7 @@ Implementation of Residual Networks (ResNet) by chainer
 All hyperparameters and network architecture are the same as in [[1]][Paper] except for data-augmentation.  
 * Data augmentation  
 Train: Pictures are randomly resized in the range of [28, 36], then 26x26 patches are extracted randomly and are normalized locally. Horizontal flipping is applied with 0.5 probability.  
-Test: Pictures are randomly resized to 32x32, then they are normalized locally. Single image test is used to calculate total accuracy.  
+Test: Pictures are resized to 32x32, then they are normalized locally. Single image test is used to calculate total accuracy.  
 
 # Cifar10 result
 
