@@ -5,7 +5,8 @@ Implementation of Residual Networks (ResNet) by chainer
 
     git clone https://github.com/nutszebra/residual_net.git
     cd residual_net
-    git clone https://github.com/nutszebra/trainer.git
+    git submodule init
+    git submodule update
 
 # How to run
     python main.py -p ./ -g 0 
