@@ -3,8 +3,8 @@ Implementation of Residual Networks (ResNet) by chainer
 
 # Dependencies
 
-    git clone https://github.com/nutszebra/original_residual_net.git
-    cd original_residual_net
+    git clone https://github.com/nutszebra/residual_net.git
+    cd residual_net
     git submodule init
     git submodule update
 
@@ -22,14 +22,15 @@ Test: Pictures are resized to 32x32, then they are normalized locally. Single im
 
 | network              | depth | total accuracy (%) |
 |:---------------------|-------|-------------------:|
-| ResNet [[1]][Paper]  | 110   | 93.57              |
-| my implementation    | 110   | soon               |
+| ResNet [[1]][Paper]  | 164    | 94.54             |
+| my implementation    | 164    | 94.39             |
+| ResNet [[1]][Paper]  | 1001   | 95.08             |
 
-<img src="https://github.com/nutszebra/original_residual_net/blob/master/loss.jpg" alt="loss" title="loss">
-<img src="https://github.com/nutszebra/original_residual_net/blob/master/accuracy.jpg" alt="total accuracy" title="total accuracy">
+<img src="https://github.com/nutszebra/residual_net/blob/master/loss.jpg" alt="loss" title="loss">
+<img src="https://github.com/nutszebra/residual_net/blob/master/accuracy.jpg" alt="total accuracy" title="total accuracy">
 
 
 # References
-https://arxiv.org/abs/1512.03385 [[1]][Paper]
+Identity Mappings in Deep Residual Networks [[1]][Paper]
 
-[paper]: https://arxiv.org/abs/1512.03385 "Paper"
+[paper]: https://arxiv.org/abs/1603.05027 "Paper"
